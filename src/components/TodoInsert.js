@@ -1,22 +1,21 @@
-import {useCallback, useState} from 'react';
+import {useState} from 'react';
 import {MdAdd} from 'react-icons/md'
 import './TodoInsert.scss'
 
 const TodoInsert = ({ onInsert }) => {
   const [value, setValue] = useState('');
 
-  const onChange = useCallback((e) => {
+  const onChange = (e) => {
     setValue(e.target.value);
-  }, []);
+    console.log("input Value ::", e.target.value);
+  }
 
-  const onSubmit = useCallback(
-    (e) => {
+  const onSubmit = (e) => {
       onInsert(value);
+      console.log(onInsert)
       setValue('');
       e.preventDefault();
-    },
-    [onInsert, value],
-  );
+    }
 
   return (
     <form className="TodoInsert" onSubmit={onSubmit}>
