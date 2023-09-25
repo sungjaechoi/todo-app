@@ -30,15 +30,14 @@ const App = () => {
       text,
       cheked: false,
     };
-    setTodos(todos.concat(todo));
-    console.log(todos.concat(todo));
+    setTodos(todos => todos.concat(todo));
     nextId.current += 1;
   };
 
-  const onRemove = id => setTodos(todos.filter(todo => todo.id !== id))
+  const onRemove = id => setTodos(todos => todos.filter(todo => todo.id !== id))
 
   const onToggle = (id) => {
-    setTodos(
+    setTodos( todos =>
       todos.map((todo) =>
         todo.id === id ? { ...todo, checked: !todo.checked } : todo,
       ),

@@ -7,7 +7,6 @@ const TodoInsert = ({ onInsert }) => {
 
   const onChange = (e) => {
     setValue(e.target.value);
-    console.log("input Value ::", e.target.value);
   }
 
   const onSubmit = (e) => {
