@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useRef, useReducer } from "react";
 import TodoTemplate from "./components/TodoTemplate";
 import TodoInsert from "./components/TodoInsert";
 import TodoList from "./components/TodoList";
@@ -16,11 +16,26 @@ function createBulkTodos() {
   return array;
 }
 
+function todoReducer(todos, action) {
+  switch (action.type){
+    case 'INSERT' : 
+      return todos.concat(action.todo);
+    case 'REMOVE' :
+      return todos.filter(todo => todo.id !== action.id)
+    case 'TOGGLE' :
+      return todos.map((todo) =>
+        todo.id === action.id ? { ...todo, checked: !todo.checked } : todo,
+      );
+    default:
+      return todos;
+  }
+}
+
 //createBulkTodos을 함수 형태인 "createBulkTodos()"로 넣어 주게되면
 //reRendering될 떄마다 "createBulkTodos()"가 호출 된다.
 // useState에 넣은 것과 같이 넣게되면 
 const App = () => {
-  const [todos, setTodos] = useState(createBulkTodos);
+  const [todos, dispatch] = useReducer(todoReducer, undefined, createBulkTodos);
 
   const nextId = useRef(4)
 
@@ -30,19 +45,14 @@ const App = () => {
       text,
       cheked: false,
     };
-    setTodos(todos.concat(todo));
-    console.log(todos.concat(todo));
+    dispatch({type: 'INSERT', todo});
     nextId.current += 1;
   };
 
-  const onRemove = id => setTodos(todos.filter(todo => todo.id !== id))
+  const onRemove = id => dispatch({ type: 'REMOVE', id });
 
   const onToggle = (id) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, checked: !todo.checked } : todo,
-      ),
-    );
+    dispatch({ type: 'TOGGLE', id });
   };
 
   return (
